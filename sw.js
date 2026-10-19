@@ -1,8 +1,8 @@
 // Offline cache. Bump VERSION when you change any file so devices pick up the update.
-const VERSION = 'restaurant-v1';
+const VERSION = 'restaurant-v2';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
-  './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
+  './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'
 ];
 
 self.addEventListener('install', e => {
