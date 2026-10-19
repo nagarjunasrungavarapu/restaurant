@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Restaurant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Restaurant">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#ff8a3d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+  :root{
+    --bg:#fff4e0; --card:#ffffff; --ink:#3b2a1a; --orange:#ff8a3d; --green:#3bb273; --red:#e5484d;
+    --blue:#3d8bff; --yellow:#ffd23f; --shadow:0 6px 0 rgba(0,0,0,.12);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+    font-family:"Avenir Next","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif}
+  #app{height:100%;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);display:flex;flex-direction:column}
+  button{font:inherit;color:inherit;border:0;cursor:pointer}
+  .btn{background:var(--green);color:#fff;font-weight:800;font-size:30px;padding:16px 34px;border-radius:26px;box-shadow:var(--shadow);transition:transform .08s}
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+  .btn.orange{background:var(--orange)} .btn.blue{background:var(--blue)} .btn.gray{background:#b9b0a4}
+  .btn[disabled]{opacity:.4;pointer-events:none}
+
+  .top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--orange);color:#fff;font-weight:800;font-size:28px}
+  .top .pill{background:rgba(0,0,0,.18);border-radius:20px;padding:4px 16px;font-size:24px}
+  .top button{background:rgba(0,0,0,.18);color:#fff;border-radius:16px;font-size:26px;padding:4px 14px}
+
+  /* home */
+  .home{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center}
+  .home h1{font-size:76px;margin:0}
+  .home .big{font-size:150px;line-height:1}
+  .home .btn{font-size:48px;padding:24px 60px}
+
+  /* order */
+  .order{flex:1;display:grid;grid-template-columns:270px 1fr 330px;gap:14px;padding:14px;min-height:0}
+  .col{background:var(--card);border-radius:28px;box-shadow:var(--shadow);padding:14px;min-height:0;display:flex;flex-direction:column}
+  .cust{align-items:center;text-align:center}
+  .cust .face{font-size:120px;line-height:1.1;animation:bob 2s ease-in-out infinite}
+  .bubble{background:#fffbe8;border:4px solid var(--yellow);border-radius:24px;padding:10px 14px;margin-top:6px;font-size:22px;font-weight:700}
+  .bubble .em{font-size:46px;letter-spacing:4px}
+  .tabs{display:flex;gap:10px;margin-bottom:12px}
+  .tab{flex:1;background:#f1e6d3;border-radius:20px;font-size:26px;font-weight:800;padding:12px 6px}
+  .tab.on{background:var(--blue);color:#fff}
+  .menu{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;overflow-y:auto;overflow-x:hidden;align-content:start;flex:1;padding:10px 10px 4px}
+  .item{background:#fff8ec;border:4px solid #f1e0c4;border-radius:24px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:0;position:relative}
+  .item:active{transform:scale(.95)}
+  .item .e{font-size:68px;line-height:1.1}
+  .item .n{font-size:22px;font-weight:800}
+  .item .p{font-size:24px;font-weight:800;color:#fff;background:var(--green);border-radius:14px;padding:0 12px;margin-top:2px}
+  .item .count{position:absolute;top:-8px;right:-8px;background:var(--red);color:#fff;border-radius:50%;width:38px;height:38px;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .ticket h2{margin:0 0 8px;text-align:center;font-size:30px}
+  .rows{flex:1;overflow:auto}
+  .row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:3px dashed #eadcc3;font-size:26px;font-weight:700}
+  .row .e{font-size:38px}.row .sp{flex:1}
+  .row .q{width:44px;height:44px;border-radius:50%;background:#eadcc3;font-size:30px;font-weight:800;line-height:1}
+  .empty{color:#a89880;text-align:center;margin-top:30px;font-size:24px}
+  .total{display:flex;justify-content:space-between;font-size:38px;font-weight:900;margin:8px 0}
+
+  /* center stage screens */
+  .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:20px}
+  .stage h1{margin:0;font-size:58px}
+  .huge{font-size:140px;line-height:1.05}
+  .bar{width:480px;height:34px;border-radius:20px;background:#eadcc3;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--green);border-radius:20px;transition:width 2.4s linear}
+  .tray{font-size:90px;background:#fff;border-radius:40px;padding:10px 30px;box-shadow:var(--shadow);max-width:90%}
+  .happy{animation:hop .6s ease 2}
+
+  /* pay */
+  .pay{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px;min-height:0}
+  .big-num{font-size:70px;font-weight:900;line-height:1}
+  .label{font-size:26px;font-weight:800;color:#8a7658}
+  .money{display:inline-flex;align-items:center;justify-content:center;font-weight:900;color:#fff;box-shadow:var(--shadow);position:relative}
+  .note{border-radius:14px;width:150px;height:78px;font-size:40px;border:4px solid rgba(255,255,255,.55)}
+  .coin{border-radius:50%;width:84px;height:84px;font-size:34px;border:5px solid rgba(255,255,255,.55)}
+  .money:active{transform:scale(.93)}
+  .drawer{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px}
+  .given{min-height:110px;background:#f7efe0;border:4px dashed #d9c6a2;border-radius:24px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:8px 0}
+  .given .money{transform:scale(.7);margin:-12px -18px}
+  .hint{font-size:28px;font-weight:800;min-height:38px}
+  .bad{animation:shake .4s}
+
+  .stars{font-size:70px;letter-spacing:6px}
+  .confetti{position:fixed;top:-60px;font-size:44px;animation:fall linear forwards;pointer-events:none}
+
+  @keyframes bob{50%{transform:translateY(-8px)}}
+  @keyframes hop{50%{transform:translateY(-40px)}}
+  @keyframes shake{25%{transform:translateX(-12px)}75%{transform:translateX(12px)}}
+  @keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+  /* ---------- responsive: smaller landscape screens ---------- */
+  @media (max-width:900px) and (orientation:landscape){
+    .order{grid-template-columns:200px 1fr 260px;gap:8px;padding:8px}
+    .cust .face{font-size:70px}.bubble .em{font-size:34px}
+    .item .e{font-size:48px}.item .n{font-size:18px}.item .p{font-size:20px}
+    .top{font-size:22px;padding:6px 14px}
+    .huge{font-size:90px}.stage h1{font-size:40px}
+    .pay{padding:8px;gap:8px}.big-num{font-size:50px}
+  }
+  /* ---------- responsive: portrait (tall) ---------- */
+  @media (orientation:portrait){
+    .order{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;gap:10px;padding:10px}
+    .cust{flex-direction:row;align-items:center;gap:14px;text-align:left;padding:8px 14px}
+    .cust .face{font-size:84px}
+    .cust .bubble{flex:1;margin:0}
+    .cust #again{margin:0!important;white-space:nowrap}
+    .menu{grid-template-columns:repeat(3,1fr)}
+    .ticket{max-height:34vh}
+    .pay{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:start;overflow-y:auto}
+    .pay .col{flex-shrink:0}
+    .pay .col:last-child{min-height:60vh}
+    .pay .col:first-child{flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 20px}
+    .pay .col:first-child>div{width:auto}
+    .stage h1{font-size:44px}
+    .huge{font-size:110px}
+    .bar{width:70vw}
+  }
+  /* ---------- phones ---------- */
+  @media (max-width:600px){
+    .top{font-size:20px;padding:6px 12px}.top .pill{font-size:18px}
+    .home h1{font-size:46px}.home .big{font-size:96px}.home .btn{font-size:34px;padding:16px 40px}
+    .tab{font-size:18px;padding:8px 2px}
+    .item .e{font-size:46px}.item .n{font-size:16px}.item .p{font-size:18px}
+    .cust .face{font-size:60px}.bubble{font-size:16px}.bubble .em{font-size:30px}
+    .cust #again{display:none}
+    .row{font-size:20px}.row .e{font-size:28px}
+    .total{font-size:28px}.btn{font-size:24px;padding:12px 24px}
+    .note{width:110px;height:60px;font-size:30px}.coin{width:64px;height:64px;font-size:26px}
+    .big-num{font-size:48px}
+    .tray{font-size:56px}.huge{font-size:84px}.stage h1{font-size:34px}
+  }
+  /* very short screens (phone landscape) */
+  @media (max-height:480px){
+    .pay .col{overflow-y:auto}
+    .pay .col:last-child{min-height:0}
+    .top{padding:4px 12px;font-size:18px}
+    .order{padding:6px;gap:6px}
+    .col{padding:8px;border-radius:18px}
+    .huge,.home .big{font-size:64px}.home h1{font-size:40px}.stage{gap:10px}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const MENU = {
+  food:   {icon:'🍕', label:'Food',   items:[
+    ['🍕','Pizza',5],['🍔','Burger',4],['🌭','Hot dog',3],['🍝','Spaghetti',5],['🌮','Taco',3],['🍟','Fries',2]]},
+  drinks: {icon:'🥤', label:'Drinks', items:[
+    ['🥛','Milk',1],['🧃','Juice',2],['🥤','Soda',2],['🧋','Boba',3],['☕','Hot choc',2],['💧','Water',1]]},
+  treats: {icon:'🍦', label:'Treats', items:[
+    ['🍦','Ice cream',2],['🍰','Cake',3],['🍩','Donut',2],['🍪','Cookie',1],['🍎','Apple',1],['🍓','Berries',2]]}
+};
+const ALL = Object.values(MENU).flatMap(c => c.items);
+const ANIMALS = ['🐶','🐱','🐰','🐻','🦊','🐼','🐸','🦁','🐯','🐵','🐨','🐷','🦄','🐮'];
+const MONEY = [ // value, colour
+  [1,'#c98a2b','coin'],[2,'#8d99a6','coin'],[5,'#3bb273','note'],[10,'#3d8bff','note'],[20,'#9b5de5','note']];
+
+let S = {screen:'home', tab:'food', order:{}, want:[], customer:'🐶', paid:0, given:[], tries:0, mute:false,
+         stars:0, served:0};
+try { const saved = JSON.parse(localStorage.getItem('rest')||'{}'); S.stars = saved.stars||0; S.served = saved.served||0; } catch(e){}
+const save = () => { try{ localStorage.setItem('rest', JSON.stringify({stars:S.stars, served:S.served})); }catch(e){} };
+
+/* ---------- sound ---------- */
+let ac;
+function beep(freqs, dur=0.12){
+  if(S.mute) return;
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    let t = ac.currentTime;
+    freqs.forEach(f=>{
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(ac.destination);
+      g.gain.setValueAtTime(.18,t); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+      o.start(t); o.stop(t+dur); t += dur*.9;
+    });
+  }catch(e){}
+}
+const sTap=()=>beep([660]), sAdd=()=>beep([520,780]), sCoin=()=>beep([1200,1600],.09),
+      sOops=()=>beep([300,220],.18), sWin=()=>beep([523,659,784,1047],.14), sBell=()=>beep([1318,1318],.2);
+function say(text){
+  if(S.mute || !window.speechSynthesis) return;
+  try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.rate=.9; u.pitch=1.2; speechSynthesis.speak(u);}catch(e){}
+}
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const total = () => Object.entries(S.order).reduce((t,[n,q])=>t+q*ALL.find(i=>i[1]===n)[2],0);
+const orderCount = () => Object.values(S.order).reduce((a,b)=>a+b,0);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const sum = a => a.reduce((x,y)=>x+y,0);
+function moneyEl(v, extra=''){
+  const [,c,kind] = MONEY.find(m=>m[0]===v);
+  return `<button class="money ${kind}" style="background:${c}" ${extra}>$${v}</button>`;
+}
+function confetti(){
+  const bits=['🎉','⭐','✨','🎈','💖','🌟'];
+  for(let i=0;i<26;i++){
+    const d=document.createElement('div'); d.className='confetti'; d.textContent=pick(bits);
+    d.style.left=Math.random()*100+'vw'; d.style.animationDuration=(2+Math.random()*2)+'s'; d.style.animationDelay=Math.random()+'s';
+    document.body.appendChild(d); setTimeout(()=>d.remove(),5200);
+  }
+}
+const topbar = () => `<div class="top"><span>🍽️ My Restaurant</span>
+  <span><span class="pill">⭐ ${S.stars}</span> <button id="mute">${S.mute?'🔇':'🔊'}</button></span></div>`;
+function wireTop(){ const m=$('#mute'); if(m) m.onclick=()=>{S.mute=!S.mute; m.textContent=S.mute?'🔇':'🔊'; if(S.mute&&window.speechSynthesis)speechSynthesis.cancel();}; }
+
+/* ---------- screens ---------- */
+function go(screen){ S.screen=screen; render(); }
+
+function render(){
+  ({home, order, cook, serve, pay, done}[S.screen])();
+  wireTop();
+}
+
+function home(){
+  $('#app').innerHTML = `<div class="home">
+    <div class="big">🍕🧑‍🍳🍦</div>
+    <h1>My Restaurant</h1>
+    <button class="btn orange" id="open">Open!</button>
+    <div class="label">Customers served: ${S.served} &nbsp; ⭐ ${S.stars}</div></div>`;
+  $('#open').onclick = () => { sBell(); newCustomer(); };
+}
+
+function newCustomer(){
+  S.customer = pick(ANIMALS); S.order = {}; S.paid = 0; S.given = []; S.tries = 0;
+  const n = 1 + Math.floor(Math.random()*3), want = [];
+  for(let i=0;i<n;i++) want.push(pick(ALL));
+  S.want = want; // list of menu entries (may repeat)
+  go('order');
+  setTimeout(()=>say('Hello! I would like ' + want.map(w=>w[1]).join(', and ') + ', please!'), 300);
+}
+
+function order(){
+  const cat = MENU[S.tab];
+  const t = total();
+  $('#app').innerHTML = topbar() + `<div class="order">
+    <div class="col cust">
+      <div class="face">${S.customer}</div>
+      <div class="bubble">I would like…<div class="em">${S.want.map(w=>w[0]).join(' ')}</div></div>
+      <button class="btn blue" id="again" style="font-size:22px;padding:8px 18px;margin-top:auto">🔊 Say again</button>
+    </div>
+    <div class="col">
+      <div class="tabs">${Object.entries(MENU).map(([k,c])=>`<button class="tab ${k===S.tab?'on':''}" data-tab="${k}">${c.icon} ${c.label}</button>`).join('')}</div>
+      <div class="menu">${cat.items.map(i=>{
+        const q=S.order[i[1]]||0;
+        return `<button class="item" data-name="${i[1]}"><span class="e">${i[0]}</span><span class="n">${i[1]}</span><span class="p">$${i[2]}</span>${q?`<span class="count">${q}</span>`:''}</button>`;}).join('')}</div>
+    </div>
+    <div class="col ticket">
+      <h2>📝 Order</h2>
+      <div class="rows">${orderCount()===0?'<div class="empty">Tap food to add it!</div>':
+        Object.entries(S.order).map(([n,q])=>{const it=ALL.find(i=>i[1]===n);
+          return `<div class="row"><span class="e">${it[0]}</span><span class="sp">${n}</span>
+            <button class="q" data-minus="${n}">−</button><b>${q}</b><button class="q" data-plus="${n}">+</button></div>`;}).join('')}</div>
+      <div class="total"><span>Total</span><span>$${t}</span></div>
+      <button class="btn" id="send" ${orderCount()?'':'disabled'}>Cook it! 👨‍🍳</button>
+    </div></div>`;
+  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{sTap();S.tab=b.dataset.tab;order();wireTop();});
+  document.querySelectorAll('.item').forEach(b=>b.onclick=()=>{sAdd();const n=b.dataset.name;S.order[n]=(S.order[n]||0)+1;say(n);order();wireTop();});
+  document.querySelectorAll('[data-plus]').forEach(b=>b.onclick=()=>{sTap();S.order[b.dataset.plus]++;order();wireTop();});
+  document.querySelectorAll('[data-minus]').forEach(b=>b.onclick=()=>{sTap();const n=b.dataset.minus;if(--S.order[n]<=0)delete S.order[n];order();wireTop();});
+  $('#again').onclick=()=>say('I would like '+S.want.map(w=>w[1]).join(', and ')+', please!');
+  $('#send').onclick=()=>{sBell();go('cook');};
+}
+
+function cook(){
+  $('#app').innerHTML = topbar()+`<div class="stage"><div class="huge">🧑‍🍳🔥</div><h1>Cooking…</h1>
+    <div class="bar"><i id="fill"></i></div></div>`;
+  say('Cooking!');
+  setTimeout(()=>{ const f=$('#fill'); if(f) f.style.width='100%'; },50);
+  setTimeout(()=>{ if(S.screen==='cook'){ sBell(); go('serve'); } },2500);
+}
+
+function serve(){
+  const food = Object.entries(S.order).flatMap(([n,q])=>Array(q).fill(ALL.find(i=>i[1]===n)[0])).join(' ');
+  $('#app').innerHTML = topbar()+`<div class="stage"><div class="huge" id="cu">${S.customer}</div>
+    <div class="tray">${food}</div>
+    <button class="btn orange" id="srv" style="font-size:44px;padding:22px 56px">Serve! 🛎️</button></div>`;
+  say('Order up!');
+  $('#srv').onclick=()=>{
+    sWin(); say('Yummy! Thank you!');
+    $('#cu').classList.add('happy'); $('#srv').disabled=true; $('#srv').style.opacity=.4;
+    setTimeout(()=>go('pay'),2000);
+  };
+}
+
+function pay(){
+  const t = total();
+  if(!S.paid){ const opts=[5,10,20].filter(v=>v>=t); S.paid = t<=5 ? pick([5,10]) : (opts[0]===undefined?20:pick(opts.slice(0,2))); if(t>20) S.paid = Math.ceil(t/10)*10; }
+  const change = S.paid - t, got = sum(S.given);
+  const exact = change===0;
+  $('#app').innerHTML = topbar()+`<div class="pay">
+    <div class="col" style="align-items:center;text-align:center;gap:6px">
+      <div style="font-size:90px">${S.customer}</div>
+      <div class="label">The bill is</div><div class="big-num">$${t}</div>
+      <div class="label" style="margin-top:12px">I give you</div>
+      <div class="money note" style="background:${(MONEY.find(m=>m[0]===S.paid)||MONEY[3])[1]};width:${S.paid>20?200:150}px">$${S.paid}</div>
+      ${exact?`<div class="hint" style="margin-top:16px">Perfect! No change needed 🎯</div>
+        <button class="btn" id="take" style="margin-top:12px">Take money 💰</button>`
+      :`<div class="hint" style="margin-top:14px">Give back <span style="color:var(--red);font-size:44px">$${change}</span> change!</div>
+        <div class="label">$${S.paid} − $${t} = ?</div>`}
+    </div>
+    <div class="col" style="align-items:center;text-align:center">
+      ${exact?`<div class="huge" style="margin-top:60px">💵</div>`:`
+      <div class="label">Your money drawer — tap to give change</div>
+      <div class="drawer">${[1,2,5,10].map(v=>moneyEl(v,`data-v="${v}"`)).join('')}</div>
+      <div class="label" style="margin-top:12px">Change you are giving: <b style="font-size:36px;color:var(--ink)">$${got}</b></div>
+      <div class="given" id="given">${S.given.length?S.given.map((v,i)=>moneyEl(v,`data-rm="${i}"`)).join(''):'<span class="label">Tap money above 👆</span>'}</div>
+      <div class="hint" id="hint"></div>
+      <div style="display:flex;gap:12px;margin-top:auto">
+        <button class="btn gray" id="clear" style="font-size:24px">Clear</button>
+        <button class="btn gray" id="help" style="font-size:24px">💡 Help me</button>
+        <button class="btn" id="give">Give change ✔</button></div>`}
+    </div></div>`;
+  if(exact){ $('#take').onclick=()=>finish(true); say('The bill is '+t+' dollars.'); return; }
+  say(`The bill is ${t} dollars. I give you ${S.paid} dollars. How much change?`);
+  document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{sCoin();S.given.push(+b.dataset.v);pay();wireTop();});
+  document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{sTap();S.given.splice(+b.dataset.rm,1);pay();wireTop();});
+  $('#clear').onclick=()=>{sTap();S.given=[];pay();wireTop();};
+  $('#help').onclick=()=>{ sTap(); S.tries++; $('#hint').textContent = `Count up from $${t} to $${S.paid}! You need $${change}.`; say(`Count up from ${t} to ${S.paid}. You need ${change} dollars.`); };
+  $('#give').onclick=()=>{
+    const g=sum(S.given);
+    if(g===change){ finish(S.tries===0); }
+    else{
+      sOops(); S.tries++;
+      const h=$('#hint'); h.classList.remove('bad'); void h.offsetWidth; h.classList.add('bad');
+      h.textContent = g<change ? 'A little more! 🤏' : 'Oops, too much! Take some back.';
+      say(g<change?'A little more!':'Too much. Take some back.');
+    }
+  };
+}
+
+function finish(perfect){
+  const earned = perfect ? 2 : 1;
+  S.stars += earned; S.served++; save();
+  S.earned = earned;
+  sWin(); confetti(); go('done');
+  say('Great job! Thank you, come again!');
+}
+
+function done(){
+  $('#app').innerHTML = topbar()+`<div class="stage"><div class="huge">${S.customer}👋</div>
+    <h1>Thank you! Come again!</h1>
+    <div class="stars">${'⭐'.repeat(S.earned)}</div>
+    <div class="label">${S.earned===2?'Wow, perfect job!':'Good job!'}</div>
+    <button class="btn orange" id="next" style="font-size:44px;padding:22px 56px">Next customer ➜</button></div>`;
+  $('#next').onclick=()=>{sBell();newCustomer();};
+}
+
+render();
+
+/* ---------- installable + offline + keep saved data ---------- */
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+// Re-fit on rotation (screens are rebuilt from CSS, nothing to do besides keeping the page unscrolled)
+window.addEventListener('orientationchange', () => window.scrollTo(0, 0));
+</script>
+</body>
+</html>
