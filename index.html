@@ -173,6 +173,14 @@
   .seg button{background:var(--soft);border:3px solid var(--line);border-radius:18px;padding:8px 20px;font-size:clamp(20px,2.6vw,26px);font-weight:900}
   .seg button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
 
+  .gold{color:#f5a623;letter-spacing:2px}
+  .h-stars{font-size:clamp(16px,2.2vw,22px);line-height:1.2}
+  .rate-row{display:flex;gap:clamp(4px,1.5vw,14px);justify-content:center}
+  .rstar{font-size:clamp(54px,12vw,110px);line-height:1;color:#d9cdb8;padding:0 4px;transition:transform .15s}
+  .rstar.on{color:#f5a623;text-shadow:0 4px 0 rgba(0,0,0,.12);transform:scale(1.12)}
+  .rstar:active{transform:scale(.9)}
+  .rate-word{font-size:clamp(24px,4vw,38px);font-weight:900;color:var(--teal);min-height:1.3em}
+  .stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))!important}
   .confetti{position:fixed;top:-60px;font-size:44px;animation:fall linear forwards;pointer-events:none;z-index:50}
 
   @keyframes bob{50%{transform:translateY(-8px)}}
@@ -227,24 +235,24 @@
 /* ===================== data ===================== */
 const CATS = [
   {id:'south', icon:'🥞', label:'South Indian', bg:'#fff0d4', items:[
-    ['🍥','Idly',2],['🫓','Dosa',3],['🌯','Masala Dosa',4],['🍩','Medu Vada',2],['🥞','Uttapam',4],['🍚','Pongal',3],
-    ['🥣','Upma',3],['🍲','Sambar Rice',4],['🍚','Curd Rice',3],['🍛','Lemon Rice',3],['🥘','Veg Kurma',4],['🫓','Poori',3]]},
+    ['🍥','Idly',6],['🫓','Dosa',9],['🌯','Masala Dosa',11],['🍩','Medu Vada',6],['🥞','Uttapam',10],['🍚','Pongal',8],
+    ['🥣','Upma',7],['🍲','Sambar Rice',9],['🍚','Curd Rice',8],['🍛','Lemon Rice',8],['🥘','Veg Kurma',10],['🫓','Poori',9]]},
   {id:'north', icon:'🍛', label:'Indian Meals', bg:'#ffe6dc', items:[
-    ['🍛','Biryani',6],['🍗','Chicken Curry',6],['🧀','Paneer Curry',5],['🫓','Naan',2],['🫓','Chapati',1],['🥟','Samosa',2],
-    ['🍲','Dal Tadka',4],['🍞','Pav Bhaji',4],['🫘','Chole Bhature',5],['🍚','Fried Rice',4],['🍜','Noodles',4],['🥙','Kathi Roll',4]]},
+    ['🍛','Biryani',14],['🍗','Chicken Curry',15],['🧀','Paneer Curry',13],['🫓','Naan',3],['🫓','Chapati',2],['🥟','Samosa',5],
+    ['🍲','Dal Tadka',11],['🍞','Pav Bhaji',10],['🫘','Chole Bhature',11],['🍚','Fried Rice',10],['🍜','Noodles',10],['🥙','Kathi Roll',9]]},
   {id:'italian', icon:'🍝', label:'Italian', bg:'#e4f4e4', items:[
-    ['🍕','Pizza',5],['🍝','Spaghetti',5],['🍝','Penne Pasta',5],['🍝','Lasagna',6],['🥖','Garlic Bread',2],['🍅','Bruschetta',3],
-    ['🍚','Risotto',5],['🧀','Mac & Cheese',4],['🥟','Ravioli',5],['🥗','Caesar Salad',4],['🥪','Panini',4],['🍕','Cheese Pizza',5]]},
+    ['🍕','Pizza',14],['🍝','Spaghetti',13],['🍝','Penne Pasta',13],['🍝','Lasagna',15],['🥖','Garlic Bread',5],['🍅','Bruschetta',8],
+    ['🍚','Risotto',16],['🧀','Mac & Cheese',9],['🥟','Ravioli',14],['🥗','Caesar Salad',10],['🥪','Panini',9],['🍕','Cheese Pizza',12]]},
   {id:'world', icon:'🍔', label:'Continental', bg:'#e3eefc', items:[
-    ['🍔','Burger',4],['🍟','Fries',2],['🌭','Hot Dog',3],['🥪','Sandwich',3],['🌮','Taco',3],['🌯','Burrito',4],
-    ['🥗','Green Salad',3],['🍲','Soup',2],['🍳','Omelette',3],['🥞','Pancakes',3],['🥩','Steak',8],['🍗','Fried Chicken',5],['🍣','Sushi',6],['🧇','Waffles',3]]},
+    ['🍔','Burger',10],['🍟','Fries',4],['🌭','Hot Dog',6],['🥪','Sandwich',8],['🌮','Taco',5],['🌯','Burrito',10],
+    ['🥗','Green Salad',8],['🍲','Soup',6],['🍳','Omelette',8],['🥞','Pancakes',9],['🥩','Steak',24],['🍗','Fried Chicken',12],['🍣','Sushi',14],['🧇','Waffles',9]]},
   {id:'drinks', icon:'☕', label:'Drinks', bg:'#e8f6f4', items:[
-    ['☕','Filter Coffee',2],['🍵','Tea',1],['🫖','Masala Chai',2],['🍋','Lemon Juice',2],['🍊','Orange Juice',3],['🍎','Apple Juice',3],
-    ['🥭','Mango Juice',3],['🍍','Pineapple Juice',3],['🍉','Watermelon Juice',3],['🍇','Grape Juice',3],['🥥','Coconut Water',2],['🥛','Lassi',3],
-    ['🥛','Milk',1],['🥤','Soda',2],['🧋','Boba Tea',3],['🍫','Hot Chocolate',2],['💧','Water',1]]},
+    ['💧','Water Bottle',2],['☕','Filter Coffee',3],['🍵','Tea',2],['🫖','Masala Chai',3],['🍋','Lemon Juice',4],['🍊','Orange Juice',4],['🍎','Apple Juice',4],
+    ['🥭','Mango Juice',5],['🍍','Pineapple Juice',4],['🍉','Watermelon Juice',4],['🍇','Grape Juice',4],['🥥','Coconut Water',4],['🥛','Lassi',5],
+    ['🥛','Milk',2],['🥤','Soda',2],['🧋','Boba Tea',6],['🍫','Hot Chocolate',4]]},
   {id:'sweets', icon:'🍰', label:'Sweets & Fruit', bg:'#fde7f1', items:[
-    ['🍦','Ice Cream',2],['🍰','Cake',3],['🍩','Donut',2],['🍪','Cookie',1],['🍡','Gulab Jamun',2],['🌀','Jalebi',2],
-    ['🍮','Payasam',3],['🍨','Kulfi',2],['🍌','Banana',1],['🍎','Apple',1],['🥭','Mango',2],['🍇','Grapes',2],['🍓','Strawberries',2],['🍉','Watermelon',2]]}
+    ['🍦','Ice Cream',4],['🍰','Cake',6],['🍩','Donut',3],['🍪','Cookie',2],['🍡','Gulab Jamun',5],['🌀','Jalebi',4],
+    ['🍮','Payasam',5],['🍨','Kulfi',4],['🍌','Banana',1],['🍎','Apple',1],['🥭','Mango',3],['🍇','Grapes',3],['🍓','Strawberries',4],['🍉','Watermelon',3]]}
 ];
 const ALL = CATS.flatMap(c => c.items.map(i => ({e:i[0], n:i[1], p:i[2], cat:c.id, bg:c.bg})));
 const ITEM = Object.fromEntries(ALL.map(i => [i.n, i]));
@@ -260,15 +268,16 @@ const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 const S = {
   screen:'home', tab:'south', order:{}, want:[],
   cust:{name:'', avatar:'🐶', table:1},
-  tendered:'', given:[], hint:'', perfect:true, step:'amount', earned:1, tries:0, helps:0,
+  tendered:'', given:[], hint:'', perfect:true, step:'amount', earned:1, tries:0, helps:0, rating:0, orderNo:1,
   last:null, openId:null, confirmClear:false,
   mute:false,
   settings:Object.assign({name:'My Restaurant', cur:'$', hints:true}, load('rest_settings', {})),
   history:load('rest_history', []),
   stars:(load('rest', {}).stars) || 0,
-  served:(load('rest', {}).served) || 0
+  served:(load('rest', {}).served) || 0,
+  seq:(load('rest', {}).seq) || 0
 };
-const saveStats = () => store('rest', {stars:S.stars, served:S.served});
+const saveStats = () => store('rest', {stars:S.stars, served:S.served, seq:S.seq});
 
 /* ===================== helpers ===================== */
 const $ = s => document.querySelector(s);
@@ -282,6 +291,9 @@ const total = () => lines().reduce((t, l) => t + l.item.p * l.qty, 0);
 const orderCount = () => sum(Object.values(S.order));
 const wishText = () => S.want.map(w => w.n).join(', and ');
 const tableText = () => 'Table ' + S.cust.table;
+const starsStr = r => '★'.repeat(r) + '☆'.repeat(5 - r);
+const avgRating = () => { const r = S.history.filter(h => h.rating).map(h => h.rating); return r.length ? (sum(r) / r.length) : 0; };
+const RATE_WORDS = ['', 'Oh no… 😢', 'Could be better 😐', 'Good! 🙂', 'Great! 😄', 'Amazing! 🤩'];
 
 /* ===================== sound & voice ===================== */
 let ac;
@@ -328,7 +340,7 @@ const topbar = () => `
   <div class="top">
     <button class="brand" id="brand"><div class="logo">🍽️</div><span class="t">${esc(S.settings.name)}</span></button>
     <div class="chips">
-      <span class="chip">⭐ ${S.stars}</span>
+      <span class="chip">🏅 ${S.stars}</span>
       <button class="chip" id="hist" aria-label="Order history">📒</button>
       <button class="chip" id="cog" aria-label="Settings">⚙️</button>
       <button class="chip" id="mute" aria-label="Sound">${S.mute ? '🔇' : '🔊'}</button>
@@ -347,7 +359,7 @@ function wireTop(){
 const shell = inner => { $('#app').innerHTML = topbar() + inner; wireTop(); };
 
 function go(screen){ S.screen = screen; render(); }
-function render(){ ({home, newcust, order, cook, serve, pay, done, history, settings}[S.screen])(); }
+function render(){ ({home, newcust, order, cook, serve, pay, rate, done, history, settings}[S.screen])(); }
 
 /* ===================== screens ===================== */
 function home(){
@@ -360,7 +372,8 @@ function home(){
       <button class="btn ghost small" id="h2">📒 Order history</button>
       <button class="btn ghost small" id="s2">⚙️ Settings</button>
     </div>
-    <div class="label">Customers served: ${S.served} &nbsp;·&nbsp; ⭐ ${S.stars}</div>
+    ${avgRating() ? `<div class="label gold" style="font-size:clamp(20px,3vw,30px)">${starsStr(Math.round(avgRating()))} <span class="muted">${avgRating().toFixed(1)} from ${S.history.filter(h => h.rating).length} reviews</span></div>` : ''}
+    <div class="label">Customers served: ${S.served} &nbsp;·&nbsp; 🏅 ${S.stars}</div>
   </div>`);
   $('#open').onclick = () => { sBell(); S.cust = {name:'', avatar:pick(AVATARS), table:1}; go('newcust'); };
   $('#h2').onclick = () => { sTap(); S.openId = null; go('history'); };
@@ -392,7 +405,7 @@ function newcust(){
 }
 
 function startOrder(){
-  S.order = {}; S.given = []; S.tendered = ''; S.hint = ''; S.perfect = true; S.step = 'amount'; S.tries = 0; S.helps = 0;
+  S.order = {}; S.given = []; S.tendered = ''; S.hint = ''; S.perfect = true; S.step = 'amount'; S.tries = 0; S.helps = 0; S.rating = 0; S.orderNo = S.seq + 1;
   const n = 1 + Math.floor(Math.random() * 3);
   S.want = Array.from({length:n}, () => pick(ALL));
   go('order');
@@ -419,7 +432,7 @@ function order(){
     </div>
     <div class="card ticket">
       <h2>📝 Order</h2>
-      <div class="sub">${esc(S.cust.name)} · Table ${S.cust.table}</div>
+      <div class="sub">Order #${S.orderNo} · ${esc(S.cust.name)} · Table ${S.cust.table}</div>
       <div class="rows">${orderCount() === 0 ? '<div class="empty">Tap food to add it!</div>' :
         lines().map(l => `<div class="row"><span class="e">${l.item.e}</span><span class="sp">${esc(l.item.n)}</span>
           <button class="q" data-minus="${esc(l.item.n)}">−</button><b>${l.qty}</b><button class="q" data-plus="${esc(l.item.n)}">+</button>
@@ -462,7 +475,7 @@ function receiptCol(){
   return `<div class="card receipt">
     <div style="font-size:clamp(50px,9vh,80px)">${S.cust.avatar}</div>
     <div class="who" style="font-weight:900;font-size:clamp(20px,2.6vw,28px)">${esc(S.cust.name)}</div>
-    <div class="badge">🪑 Table ${S.cust.table}</div>
+    <div class="badge">🪑 Table ${S.cust.table}</div><div class="label" style="font-size:14px">Order #${S.orderNo}</div>
     <div class="lines">${lines().map(l => `<div class="ln"><span>${l.qty} × ${l.item.e} ${esc(l.item.n)}</span><span>${esc(fmt(l.item.p * l.qty))}</span></div>`).join('')}</div>
     <div class="label">The bill is</div><div class="big-num">${esc(fmt(total()))}</div>
     ${S.step === 'change' ? `<div class="label" style="margin-top:8px">${esc(S.cust.name)} gave you</div><div class="big-num" style="font-size:clamp(30px,5vw,48px);color:var(--ink)">${esc(fmt(+S.tendered))}</div>
@@ -551,34 +564,61 @@ function payChange(){
 function finish(){
   const t = total(), got = +S.tendered || t;
   S.earned = S.perfect ? 2 : 1;
-  S.stars += S.earned; S.served++; saveStats();
+  S.stars += S.earned; S.served++; S.seq = S.orderNo; saveStats();
   const rec = {
-    id:Date.now(), ts:new Date().toISOString(),
+    id:Date.now(), no:S.orderNo, ts:new Date().toISOString(),
     name:S.cust.name, avatar:S.cust.avatar, table:S.cust.table, cur:S.settings.cur,
     items:lines().map(l => ({e:l.item.e, n:l.item.n, p:l.item.p, q:l.qty})),
-    total:t, paid:got, change:got - t
+    total:t, paid:got, change:got - t, rating:null
   };
-  S.last = rec;
+  S.last = rec; S.rating = 0;
   S.history.unshift(rec); S.history = S.history.slice(0, 300); store('rest_history', S.history);
-  sWin(); confetti(); go('done');
-  say(`Great job! Thank you ${S.cust.name}, come again!`);
+  sWin(); go('rate');
+  say(`Thank you ${S.cust.name}! How did you like ${S.settings.name}? Tap the stars!`);
+}
+
+function rate(){
+  shell(`<div class="screen center stage scroll">
+    <div class="huge">${S.cust.avatar}</div>
+    <h1>How did you like ${esc(S.settings.name)}?</h1>
+    <div class="label">${esc(S.cust.name)}, tap the stars to tell us!</div>
+    <div class="rate-row">${[1,2,3,4,5].map(n => `<button class="rstar ${n <= S.rating ? 'on' : ''}" data-r="${n}" aria-label="${n} stars">${n <= S.rating ? '★' : '☆'}</button>`).join('')}</div>
+    <div class="rate-word" id="rw">${RATE_WORDS[S.rating] || '&nbsp;'}</div>
+    <button class="btn coral" id="submit" ${S.rating ? '' : 'disabled'}>Send my rating ➜</button>
+  </div>`);
+  $$('[data-r]').forEach(b => b.onclick = () => {
+    S.rating = +b.dataset.r; sCoin();
+    $$('.rstar').forEach(x => { const on = +x.dataset.r <= S.rating; x.classList.toggle('on', on); x.textContent = on ? '★' : '☆'; });
+    $('#rw').textContent = RATE_WORDS[S.rating]; $('#submit').disabled = false;
+    say(['', 'Oh no.', 'Could be better.', 'Good!', 'Great!', 'Amazing! Five stars!'][S.rating]);
+  });
+  $('#submit').onclick = () => {
+    if (!S.rating) return;
+    S.last.rating = S.rating;
+    const h = S.history.find(x => x.id === S.last.id); if (h) h.rating = S.rating;
+    store('rest_history', S.history);
+    sWin(); confetti(); go('done');
+    say(`Thank you ${S.cust.name}, come again!`);
+  };
 }
 
 function slipHTML(r){
   const c = r.cur || '$';
   return `<div class="slip">
+    <div class="ln" style="font-weight:900;color:var(--muted)"><span>Order #${r.no || '-'}</span><span>${esc(r.name)} · Table ${r.table}</span></div>
     ${r.items.map(i => `<div class="ln"><span>${i.q} × ${i.e} ${esc(i.n)}</span><span>${esc(c)}${i.p * i.q}</span></div>`).join('')}
     <div class="ln tot"><span>Total</span><span>${esc(c)}${r.total}</span></div>
     <div class="ln"><span>Paid</span><span>${esc(c)}${r.paid}</span></div>
-    <div class="ln"><span>Change</span><span>${esc(c)}${r.change}</span></div></div>`;
+    <div class="ln"><span>Change</span><span>${esc(c)}${r.change}</span></div>
+    ${r.rating ? `<div class="ln"><span>Rating</span><span class="gold">${starsStr(r.rating)}</span></div>` : ''}</div>`;
 }
 
 function done(){
   shell(`<div class="done-wrap">
     <div class="huge" style="font-size:clamp(60px,12vh,110px)">${S.cust.avatar}👋</div>
     <h1>Thank you, ${esc(S.cust.name)}! Come again!</h1>
-    <div class="stars">${'⭐'.repeat(S.earned)}</div>
-    <div class="label">${S.earned === 2 ? 'Wow, perfect job!' : 'Good job!'}</div>
+    <div class="stars">${'🏅'.repeat(S.earned)}</div>
+    <div class="label">${S.earned === 2 ? 'Wow, perfect job! You earned 2 medals!' : 'Good job! You earned a medal!'}</div>
     ${slipHTML(S.last)}
     <div class="row-btns"><button class="btn coral" id="next">Next customer ➜</button></div>
   </div>`);
@@ -598,11 +638,13 @@ function history(){
       <div class="stat"><b>${todays.length}</b><span>Orders today</span></div>
       <div class="stat"><b>${esc(cur)}${sales(todays)}</b><span>Sales today</span></div>
       <div class="stat"><b>${S.history.length}</b><span>All orders</span></div>
+      <div class="stat"><b>${avgRating() ? '★ ' + avgRating().toFixed(1) : '–'}</b><span>Customer rating</span></div>
     </div>
     <div class="hist">${S.history.length === 0 ? '<div class="empty">No orders yet.<br>Serve a customer and it will show up here!</div>' :
       S.history.map(h => `<button class="h-item" data-id="${h.id}">
         <div class="h-top"><span class="h-av">${h.avatar}</span>
-          <div class="h-mid"><div class="h-name">${esc(h.name)}</div><div class="h-sub">Table ${h.table} · ${esc(fmtTime(h.ts))}</div></div>
+          <div class="h-mid"><div class="h-name">${esc(h.name)}</div><div class="h-sub">${h.no ? '#' + h.no + ' · ' : ''}Table ${h.table} · ${esc(fmtTime(h.ts))}</div>
+            <div class="gold h-stars">${h.rating ? starsStr(h.rating) : '<span class="muted">No rating</span>'}</div></div>
           <span class="h-tot">${esc(h.cur || cur)}${h.total}</span></div>
         ${S.openId === h.id ? `<div class="h-det">${h.items.map(i => `<div class="ln"><span>${i.q} × ${i.e} ${esc(i.n)}</span><span>${esc(h.cur || cur)}${i.p * i.q}</span></div>`).join('')}
           <div class="ln"><span>Paid</span><span>${esc(h.cur || cur)}${h.paid}</span></div><div class="ln"><span>Change</span><span>${esc(h.cur || cur)}${h.change}</span></div></div>` : ''}
